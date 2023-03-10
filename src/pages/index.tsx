@@ -1,10 +1,16 @@
-import { useState } from 'react'
-import { Button, Card, CardBody, Select, Text, Textarea } from '@chakra-ui/react'
+import { useMemo, useState } from 'react'
+import { Button, Card, CardBody, Select, Text, Textarea, useColorMode } from '@chakra-ui/react'
+
+import Footer from '~/components/Footer'
 
 export default function Home() {
+  const [describe, setDescribe] = useState('')
   const [prompt, setPrompt] = useState('')
   const [answer, setAnswer] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { colorMode, toggleColorMode } = useColorMode()
+
+  const convertion = useMemo(() => `${prompt}:\n ${describe}`, [describe, prompt])
 
   async function handleClick() {
     setAnswer('')
@@ -15,11 +21,13 @@ export default function Home() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        prompt,
+        prompt: convertion,
       }),
     })
-    if (!response.ok)
+    if (!response.ok) {
+      setIsLoading(false)
       throw new Error(response.statusText)
+    }
 
     // This data is a ReadableStream
     const data = response.body
@@ -52,25 +60,34 @@ export default function Home() {
       option: '总结内容',
       value: '用一段话详略得当总结这段聊天内容',
     },
+    {
+      option: '英文翻译',
+      value: '翻译成简体中文',
+    },
   ]
 
-  // const promptObj = {
-  //   英文邮件: 'Generate a business email in UK English that is friendly, but still professional and appropriate for the workplace.The topic is',
-  //   中文邮件: 'Generate a business email in Simplified Chinese  that is friendly, but still professional and appropriate for the workplace.The topic is',
-  //   说了啥: '用一段话详略得当总结这段聊天内容',
-  // }
+  function handleSelect(value: string) {
+    setPrompt(value)
+  }
 
   return (
-    <div className='text-center max-w-5xl mx-auto flex-col mt-4 p-2 min-h-screen'>
-      <h2 className='h2'>ChatGPT Demo</h2>
+    <div className={`text-center max-w-5xl mx-auto mt-4 p-2 min-h-screen ${colorMode === 'dark' ? 'dark' : ''}`}>
+      <main className='max-w-2xl mx-auto'>
+      <div className='py-2 flex justify-between items-center'>
+        <h2 className='h2'>ChatGPT Demo</h2>
+        <div
+          className='dark:i-carbon-sun i-carbon-moon cursor-pointer'
+          onClick={toggleColorMode}
+        ></div>
+      </div>
       <Textarea
-        placeholder='writing some thing'
+        placeholder='e.g. hello world'
         size="lg"
-        value={prompt}
-        onChange={e => setPrompt(e.target.value)}
+        value={describe}
+        onChange={e => setDescribe(e.target.value)}
       ></Textarea>
-      <h2 className='h2'>常用prompt</h2>
-      <Select placeholder='选择一个prompt'>
+      <h2 className='h2'>Advance Prompt</h2>
+      <Select placeholder='直接问ChatGPT' onChange={e => handleSelect(e.target.value)}>
         {
           promptArr.map(prompt => <option value={prompt.value} key={ prompt.option }>{prompt.option}</option>)
         }
@@ -79,7 +96,7 @@ export default function Home() {
         isLoading={isLoading}
         loadingText='Loading'
         className='w-full my-4'
-        colorScheme='pink'
+        colorScheme='teal'
         onClick={() => handleClick()}
       >submit</Button>
       {
@@ -90,6 +107,8 @@ export default function Home() {
         </CardBody>
       </Card>)
       }
+      </main>
+      <Footer></Footer>
     </div>
   )
 }
