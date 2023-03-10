@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
-import { Button, Card, CardBody, Select, Text, Textarea, useColorMode } from '@chakra-ui/react'
+import { Button, Select, Textarea, useColorMode, useToast } from '@chakra-ui/react'
 
 import Footer from '~/components/Footer'
+import Answer from '~/components/Answer'
 
 export default function Home() {
   const [describe, setDescribe] = useState('')
@@ -9,10 +10,19 @@ export default function Home() {
   const [answer, setAnswer] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { colorMode, toggleColorMode } = useColorMode()
+  const toast = useToast()
 
   const convertion = useMemo(() => `${prompt}:\n ${describe}`, [describe, prompt])
 
   async function handleClick() {
+    if (!describe) {
+      toast({
+        status: 'warning',
+        description: 'please type something!',
+      })
+      return
+    }
+
     setAnswer('')
     setIsLoading(true)
     const response = await fetch('/api/generate', {
@@ -101,11 +111,7 @@ export default function Home() {
       >submit</Button>
       {
         answer
-        && (<Card>
-        <CardBody>
-          <Text textAlign="left">{answer}</Text>
-        </CardBody>
-      </Card>)
+        && <Answer content={answer}></Answer>
       }
       </main>
       <Footer></Footer>
