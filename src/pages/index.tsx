@@ -93,7 +93,7 @@ export default function Home() {
         onClick={() => handleClick()}
       >submit</Button>
       {
-        true
+        answer
         && <Answer content={answer}></Answer>
       }
       </main>

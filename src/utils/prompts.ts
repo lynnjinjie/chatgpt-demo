@@ -9,6 +9,10 @@ const promptArr: PromptContent[] = [
     value: '帮我写个工作的日报，内容+列表的形式',
   },
   {
+    option: 'CodeReview',
+    value: '用最简洁的语言使用中文解释此段代码、正则表达式或脚本。如果内容不是代码，请返回错误提示。如果代码有明显的错误，请指出。',
+  },
+  {
     option: '英文邮件',
     value: 'Generate a business email in UK English that is friendly, but still professional and appropriate for the workplace.The topic is',
   },
