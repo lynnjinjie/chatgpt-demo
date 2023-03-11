@@ -4,6 +4,8 @@ import { Button, Select, Textarea, useColorMode, useToast } from '@chakra-ui/rea
 import Footer from '~/components/Footer'
 import Answer from '~/components/Answer'
 
+import prompts from '~/utils/prompts'
+
 export default function Home() {
   const [describe, setDescribe] = useState('')
   const [prompt, setPrompt] = useState('')
@@ -57,25 +59,6 @@ export default function Home() {
     setIsLoading(false)
   }
 
-  const promptArr = [
-    {
-      option: '英文邮件',
-      value: 'Generate a business email in UK English that is friendly, but still professional and appropriate for the workplace.The topic is',
-    },
-    {
-      option: '中文邮件',
-      value: 'Generate a business email in Simplified Chinese  that is friendly, but still professional and appropriate for the workplace.The topic is',
-    },
-    {
-      option: '总结内容',
-      value: '用一段话详略得当总结这段聊天内容',
-    },
-    {
-      option: '英文翻译',
-      value: '翻译成简体中文',
-    },
-  ]
-
   function handleSelect(value: string) {
     setPrompt(value)
   }
@@ -99,7 +82,7 @@ export default function Home() {
       <h2 className='h2'>Advance Prompt</h2>
       <Select placeholder='直接问ChatGPT' onChange={e => handleSelect(e.target.value)}>
         {
-          promptArr.map(prompt => <option value={prompt.value} key={ prompt.option }>{prompt.option}</option>)
+          prompts.map(prompt => <option value={prompt.value} key={ prompt.option }>{prompt.option}</option>)
         }
       </Select>
       <Button
@@ -110,7 +93,7 @@ export default function Home() {
         onClick={() => handleClick()}
       >submit</Button>
       {
-        answer
+        true
         && <Answer content={answer}></Answer>
       }
       </main>

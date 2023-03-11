@@ -3,7 +3,7 @@ import { Divider, Link } from '@chakra-ui/react'
 export default function Footer() {
   const powerby = [
     {
-      href: 'https://beta.openai.com/account',
+      href: 'https://platform.openai.com/account',
       name: 'OpenAI',
     },
     {
@@ -40,11 +40,11 @@ export default function Footer() {
             })
           }
         </div>
-        <div>
+        {/* <div>
             <Link href='https://github.com/lynnjinjie/chatgpt-demo'>
               <div className='i-carbon:logo-github'></div>
             </Link>
-        </div>
+        </div> */}
       </div>
     </footer>
   )
